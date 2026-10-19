@@ -54,6 +54,20 @@ app.post('/register', async (request, response) => {
     }
 });
 
+app.post('/signin', async (request, response) => {
+    const { username, password } = request.body;
+    if (isBlank(username) || isBlank(password))
+        return response.status(400).json({ error: 'Username and password are required.' });
+    try {
+        const user = await db.signIn(String(username), String(password));
+        if (!user) return response.status(401).json({ error: 'Invalid username or password.' });
+        response.json({ data: user });
+    } catch (err) {
+        console.log(err.message);
+        response.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/users', (request, response) => {
     send(db.getAllUsers(), response);
 });

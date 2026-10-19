@@ -46,6 +46,18 @@ function hashPassword(plain) {
     });
 }
 
+function verifyPassword(plain, stored) {
+    return new Promise((resolve, reject) => {
+        if (!stored || !stored.includes(':')) return resolve(false);
+        const [salt, hash] = stored.split(':');
+        crypto.scrypt(plain, salt, 64, (err, key) => {
+            if (err) return reject(err);
+            const expected = Buffer.from(hash, 'hex');
+            resolve(expected.length === key.length && crypto.timingSafeEqual(expected, key));
+        });
+    });
+}
+
 class DbService {
     static getDbServiceInstance() {
         if (!instance) instance = new DbService();
@@ -59,6 +71,17 @@ class DbService {
             'VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL);';
         await runQuery(sql, [username, hashed, firstname, lastname, salary, age]);
         return this.searchByUsername(username);
+    }
+
+    async signIn(username, password) {
+        const rows = await runQuery(
+            'SELECT username, password FROM Users WHERE username = ?;', [username]);
+        if (rows.length === 0) return null;
+        const ok = await verifyPassword(password, rows[0].password);
+        if (!ok) return null;
+        await runQuery('UPDATE Users SET signintime = NOW() WHERE username = ?;', [username]);
+        const user = await this.searchByUsername(username);
+        return user[0];
     }
 
     async searchByUsername(username) {

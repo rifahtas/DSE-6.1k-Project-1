@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 3: sign-in</title>
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+  <h1>User Portal</h1>
+  <p class="stage">Stage 3: sign-in</p>
+  <div class="layout">
+    <section class="box">
+      <h2>1. Register</h2>
+      <form id="register-form">
+        <input name="username" placeholder="Username (userid)" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <input name="firstname" placeholder="First name" required>
+        <input name="lastname" placeholder="Last name" required>
+        <input name="salary" type="number" step="any" min="0" placeholder="Salary" required>
+        <input name="age" type="number" min="0" max="150" placeholder="Age" required>
+        <button type="submit">Register</button>
+      </form>
+      <p id="register-msg" class="msg"></p>
+    </section>
+    <section class="box">
+      <h2>2. Sign in</h2>
+      <form id="signin-form">
+        <input name="username" placeholder="Username" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button type="submit">Sign in</button>
+      </form>
+      <p id="signin-msg" class="msg"></p>
+      <p id="session">Not signed in</p>
+    </section>
+    <section class="box">
+      <h2>Users</h2>
+      <form class="search" data-endpoint="/users" data-title="All users">
+        <label>All users</label>
+        <button>Show all</button>
+      </form>
+    </section>
+    <section class="box">
+      <h2 id="result-title">Results</h2>
+      <p id="result-msg" class="msg"></p>
+      <table id="result-table">
+        <thead>
+          <tr>
+            <th>Username</th><th>First name</th><th>Last name</th>
+            <th>Salary</th><th>Age</th><th>Registered</th><th>Last sign-in</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
