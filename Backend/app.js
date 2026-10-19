@@ -94,6 +94,22 @@ app.get('/search/age', (request, response) => {
     send(db.searchByAge(Number(min), Number(max)), response);
 });
 
+app.get('/search/after/:username', (request, response) => {
+    send(db.registeredAfter(request.params.username), response);
+});
+
+app.get('/search/never-signed-in', (request, response) => {
+    send(db.neverSignedIn(), response);
+});
+
+app.get('/search/same-day/:username', (request, response) => {
+    send(db.registeredSameDay(request.params.username), response);
+});
+
+app.get('/search/today', (request, response) => {
+    send(db.registeredToday(), response);
+});
+
 app.get('/users', (request, response) => {
     send(db.getAllUsers(), response);
 });

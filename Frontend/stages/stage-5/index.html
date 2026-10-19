@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 5: searches 7 to 10</title>
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+  <h1>User Portal</h1>
+  <p class="stage">Stage 5: searches 7 to 10</p>
+  <div class="layout">
+    <section class="box">
+      <h2>1. Register</h2>
+      <form id="register-form">
+        <input name="username" placeholder="Username (userid)" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <input name="firstname" placeholder="First name" required>
+        <input name="lastname" placeholder="Last name" required>
+        <input name="salary" type="number" step="any" min="0" placeholder="Salary" required>
+        <input name="age" type="number" min="0" max="150" placeholder="Age" required>
+        <button type="submit">Register</button>
+      </form>
+      <p id="register-msg" class="msg"></p>
+    </section>
+    <section class="box">
+      <h2>2. Sign in</h2>
+      <form id="signin-form">
+        <input name="username" placeholder="Username" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button type="submit">Sign in</button>
+      </form>
+      <p id="signin-msg" class="msg"></p>
+      <p id="session">Not signed in</p>
+    </section>
+    <section class="box">
+      <h2>Search users</h2>
+      <form class="search" data-endpoint="/search/name" data-title="3. Users matching first and/or last name">
+        <label>3. Name</label>
+        <input name="first" placeholder="first name">
+        <input name="last" placeholder="last name">
+        <button>Search</button>
+      </form>
+      <form class="search" data-endpoint="/search/userid" data-param="username" data-title="4. User with this userid">
+        <label>4. Userid</label>
+        <input name="username" placeholder="e.g. dillon">
+        <button>Search</button>
+      </form>
+      <form class="search" data-endpoint="/search/salary" data-title="5. Salary between X and Y">
+        <label>5. Salary</label>
+        <input name="min" type="number" step="any" placeholder="min X">
+        <input name="max" type="number" step="any" placeholder="max Y">
+        <button>Search</button>
+      </form>
+      <form class="search" data-endpoint="/search/age" data-title="6. Age between X and Y">
+        <label>6. Age</label>
+        <input name="min" type="number" placeholder="min X">
+        <input name="max" type="number" placeholder="max Y">
+        <button>Search</button>
+      </form>
+      <form class="search" data-endpoint="/search/after" data-param="username" data-title="7. Registered after this user registered">
+        <label>7. After</label>
+        <input name="username" placeholder="userid, e.g. dillon">
+        <button>Search</button>
+      </form>
+      <form class="search" data-endpoint="/search/never-signed-in" data-title="8. Users who never signed in">
+        <label>8. Never signed in</label>
+        <button>Show</button>
+      </form>
+      <form class="search" data-endpoint="/search/same-day" data-param="username" data-title="9. Registered the same day as this user">
+        <label>9. Same day</label>
+        <input name="username" placeholder="userid, e.g. dillon">
+        <button>Search</button>
+      </form>
+      <form class="search" data-endpoint="/search/today" data-title="10. Users who registered today">
+        <label>10. Registered today</label>
+        <button>Show</button>
+      </form>
+      <form class="search" data-endpoint="/users" data-title="All users">
+        <label>All users</label>
+        <button>Show all</button>
+      </form>
+    </section>
+    <section class="box">
+      <h2 id="result-title">Results</h2>
+      <p id="result-msg" class="msg"></p>
+      <table id="result-table">
+        <thead>
+          <tr>
+            <th>Username</th><th>First name</th><th>Last name</th>
+            <th>Salary</th><th>Age</th><th>Registered</th><th>Last sign-in</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

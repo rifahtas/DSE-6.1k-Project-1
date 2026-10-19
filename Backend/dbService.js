@@ -108,6 +108,30 @@ class DbService {
             ' FROM Users WHERE age BETWEEN ? AND ? ORDER BY age;', [min, max]);
     }
 
+    async registeredAfter(username) {
+        return runQuery('SELECT ' + SAFE_COLUMNS +
+            ' FROM Users WHERE registerday > ' +
+            '(SELECT registerday FROM Users WHERE username = ?) ORDER BY registerday, username;',
+            [username]);
+    }
+
+    async neverSignedIn() {
+        return runQuery('SELECT ' + SAFE_COLUMNS +
+            ' FROM Users WHERE signintime IS NULL ORDER BY username;');
+    }
+
+    async registeredSameDay(username) {
+        return runQuery('SELECT ' + SAFE_COLUMNS +
+            ' FROM Users WHERE registerday = ' +
+            '(SELECT registerday FROM Users WHERE username = ?) AND username <> ? ORDER BY username;',
+            [username, username]);
+    }
+
+    async registeredToday() {
+        return runQuery('SELECT ' + SAFE_COLUMNS +
+            ' FROM Users WHERE registerday = CURDATE() ORDER BY username;');
+    }
+
     async getAllUsers() {
         return runQuery('SELECT ' + SAFE_COLUMNS + ' FROM Users ORDER BY username;');
     }
