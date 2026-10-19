@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Portal</title>
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo"></span><span>User Portal</span></div>
+    <div class="session" id="session">
+      <span class="dot" id="session-dot"></span>
+      <span id="session-text">Not signed in</span>
+      <button type="button" id="signout" class="link hidden">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="card auth">
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab active" data-tab="register" role="tab">Register</button>
+        <button type="button" class="tab" data-tab="signin" role="tab">Sign in</button>
+      </div>
+
+      <form id="register-form" class="panel" autocomplete="off">
+        <label>Username
+          <input name="username" placeholder="Choose a userid" required>
+        </label>
+        <label>Password
+          <span class="pw">
+            <input name="password" type="password" placeholder="At least 4 characters" required>
+            <button type="button" class="toggle">Show</button>
+          </span>
+        </label>
+        <div class="row">
+          <label>First name <input name="firstname" required></label>
+          <label>Last name <input name="lastname" required></label>
+        </div>
+        <div class="row">
+          <label>Salary <input name="salary" type="number" step="any" min="0" required></label>
+          <label>Age <input name="age" type="number" min="0" max="150" required></label>
+        </div>
+        <button type="submit" class="primary">Create account</button>
+        <p class="msg" id="register-msg"></p>
+      </form>
+
+      <form id="signin-form" class="panel hidden" autocomplete="off">
+        <label>Username
+          <input name="username" placeholder="Your userid" required>
+        </label>
+        <label>Password
+          <span class="pw">
+            <input name="password" type="password" placeholder="Your password" required>
+            <button type="button" class="toggle">Show</button>
+          </span>
+        </label>
+        <button type="submit" class="primary">Sign in</button>
+        <p class="msg" id="signin-msg"></p>
+      </form>
+    </section>
+
+    <div class="stack">
+      <section class="card search">
+        <div class="card-head">
+          <h2>Search users</h2>
+          <span class="hint">Pick a search</span>
+        </div>
+        <div class="chips" id="chips"></div>
+        <form id="search-form" class="search-form hidden">
+          <div class="fields" id="search-fields"></div>
+          <button type="submit" class="primary">Search</button>
+        </form>
+      </section>
+
+      <section class="card results" id="results">
+        <div class="card-head">
+          <div class="title-wrap">
+            <h2 id="result-title">Results</h2>
+            <span class="badge" id="result-count">0</span>
+          </div>
+          <input type="search" id="filter" class="filter" placeholder="Filter results">
+        </div>
+        <p class="msg" id="result-msg"></p>
+        <div class="table-wrap">
+          <table id="result-table">
+            <thead>
+              <tr>
+                <th data-key="username">Username</th>
+                <th data-key="firstname">First name</th>
+                <th data-key="lastname">Last name</th>
+                <th data-key="salary" class="num">Salary</th>
+                <th data-key="age" class="num">Age</th>
+                <th data-key="registerday">Registered</th>
+                <th data-key="signintime">Last sign-in</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>
