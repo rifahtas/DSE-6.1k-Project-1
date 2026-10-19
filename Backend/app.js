@@ -68,6 +68,32 @@ app.post('/signin', async (request, response) => {
     }
 });
 
+app.get('/search/name', (request, response) => {
+    const first = (request.query.first || '').trim();
+    const last = (request.query.last || '').trim();
+    if (!first && !last)
+        return response.status(400).json({ error: 'Enter a first name, a last name, or both.' });
+    send(db.searchByName(first, last), response);
+});
+
+app.get('/search/userid/:username', (request, response) => {
+    send(db.searchByUsername(request.params.username), response);
+});
+
+app.get('/search/salary', (request, response) => {
+    const { min, max } = request.query;
+    if (isBlank(min) || isBlank(max) || isNaN(Number(min)) || isNaN(Number(max)))
+        return response.status(400).json({ error: 'Enter numeric min and max salary.' });
+    send(db.searchBySalary(Number(min), Number(max)), response);
+});
+
+app.get('/search/age', (request, response) => {
+    const { min, max } = request.query;
+    if (isBlank(min) || isBlank(max) || isNaN(Number(min)) || isNaN(Number(max)))
+        return response.status(400).json({ error: 'Enter numeric min and max age.' });
+    send(db.searchByAge(Number(min), Number(max)), response);
+});
+
 app.get('/users', (request, response) => {
     send(db.getAllUsers(), response);
 });

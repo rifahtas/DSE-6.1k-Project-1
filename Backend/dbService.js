@@ -84,8 +84,28 @@ class DbService {
         return user[0];
     }
 
+    async searchByName(first, last) {
+        const conditions = [];
+        const params = [];
+        if (first) { conditions.push('firstname LIKE ?'); params.push('%' + first + '%'); }
+        if (last) { conditions.push('lastname LIKE ?'); params.push('%' + last + '%'); }
+        const sql = 'SELECT ' + SAFE_COLUMNS + ' FROM Users WHERE ' +
+                    conditions.join(' AND ') + ' ORDER BY username;';
+        return runQuery(sql, params);
+    }
+
     async searchByUsername(username) {
         return runQuery('SELECT ' + SAFE_COLUMNS + ' FROM Users WHERE username = ?;', [username]);
+    }
+
+    async searchBySalary(min, max) {
+        return runQuery('SELECT ' + SAFE_COLUMNS +
+            ' FROM Users WHERE salary BETWEEN ? AND ? ORDER BY salary;', [min, max]);
+    }
+
+    async searchByAge(min, max) {
+        return runQuery('SELECT ' + SAFE_COLUMNS +
+            ' FROM Users WHERE age BETWEEN ? AND ? ORDER BY age;', [min, max]);
     }
 
     async getAllUsers() {
