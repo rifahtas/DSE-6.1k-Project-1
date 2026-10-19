@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 1: all users</title>
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+  <h1>User Portal</h1>
+  <p class="stage">Stage 1: all users</p>
+  <div class="layout">
+    <section class="box">
+      <h2>Users</h2>
+      <form class="search" data-endpoint="/users" data-title="All users">
+        <label>All users</label>
+        <button>Show all</button>
+      </form>
+    </section>
+    <section class="box">
+      <h2 id="result-title">Results</h2>
+      <p id="result-msg" class="msg"></p>
+      <table id="result-table">
+        <thead>
+          <tr>
+            <th>Username</th><th>First name</th><th>Last name</th>
+            <th>Salary</th><th>Age</th><th>Registered</th><th>Last sign-in</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
