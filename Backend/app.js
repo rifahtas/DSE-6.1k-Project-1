@@ -11,6 +11,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+const isBlank = (v) => v === undefined || v === null || String(v).trim() === '';
+
 function send(promise, response) {
     promise
         .then((data) => response.json({ data: data }))
@@ -19,6 +21,38 @@ function send(promise, response) {
             response.status(500).json({ error: err.message });
         });
 }
+
+app.post('/register', async (request, response) => {
+    const { username, password, firstname, lastname, salary, age } = request.body;
+
+    if ([username, password, firstname, lastname, salary, age].some(isBlank))
+        return response.status(400).json({ error: 'All fields are required.' });
+    if (String(username).length > 50)
+        return response.status(400).json({ error: 'Username must be 50 characters or fewer.' });
+    if (String(password).length < 4)
+        return response.status(400).json({ error: 'Password must be at least 4 characters.' });
+    if (isNaN(Number(salary)) || Number(salary) < 0)
+        return response.status(400).json({ error: 'Salary must be a number (0 or more).' });
+    if (!Number.isInteger(Number(age)) || Number(age) < 0 || Number(age) > 150)
+        return response.status(400).json({ error: 'Age must be a whole number from 0 to 150.' });
+
+    try {
+        const rows = await db.registerUser({
+            username: String(username).trim(),
+            password: String(password),
+            firstname: String(firstname).trim(),
+            lastname: String(lastname).trim(),
+            salary: Number(salary),
+            age: Number(age)
+        });
+        response.json({ data: rows[0] });
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY')
+            return response.status(409).json({ error: 'That username is already taken.' });
+        console.log(err.message);
+        response.status(500).json({ error: err.message });
+    }
+});
 
 app.get('/users', (request, response) => {
     send(db.getAllUsers(), response);

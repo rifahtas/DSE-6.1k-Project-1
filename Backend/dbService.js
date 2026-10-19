@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const crypto = require('crypto');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -35,10 +36,33 @@ function runQuery(sql, params = []) {
     });
 }
 
+function hashPassword(plain) {
+    return new Promise((resolve, reject) => {
+        const salt = crypto.randomBytes(16).toString('hex');
+        crypto.scrypt(plain, salt, 64, (err, key) => {
+            if (err) reject(err);
+            else resolve(salt + ':' + key.toString('hex'));
+        });
+    });
+}
+
 class DbService {
     static getDbServiceInstance() {
         if (!instance) instance = new DbService();
         return instance;
+    }
+
+    async registerUser({ username, password, firstname, lastname, salary, age }) {
+        const hashed = await hashPassword(password);
+        const sql =
+            'INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime) ' +
+            'VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL);';
+        await runQuery(sql, [username, hashed, firstname, lastname, salary, age]);
+        return this.searchByUsername(username);
+    }
+
+    async searchByUsername(username) {
+        return runQuery('SELECT ' + SAFE_COLUMNS + ' FROM Users WHERE username = ?;', [username]);
     }
 
     async getAllUsers() {
