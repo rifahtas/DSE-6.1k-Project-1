@@ -1,0 +1,68 @@
+CREATE DATABASE IF NOT EXISTS web_app;
+USE web_app;
+
+DROP TABLE IF EXISTS Users;
+
+CREATE TABLE Users (
+   username    VARCHAR(50) PRIMARY KEY,
+   password    VARCHAR(255) NOT NULL,
+   firstname   VARCHAR(50),
+   lastname    VARCHAR(50),
+   salary      FLOAT,
+   age         INTEGER,
+   registerday DATE,
+   signintime  DATETIME NULL
+);
+
+INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime) VALUES
+('eric', '79f629f2c0ef00392d5524f322745741:a2957c86bed15009b00e48de29775aeb645ffabe67011692a42aa565d7864ddb0de962da500da311dc7302360058d2c83af5ce052932aeb80785630e578add7f', 'Eric', 'Jones', 95000, 45, DATE_SUB(CURDATE(), INTERVAL 20 DAY), DATE_SUB(NOW(), INTERVAL 19 DAY)),
+('dillon', '79f629f2c0ef00392d5524f322745741:a2957c86bed15009b00e48de29775aeb645ffabe67011692a42aa565d7864ddb0de962da500da311dc7302360058d2c83af5ce052932aeb80785630e578add7f', 'Dillon', 'McGuire', 60000, 29, DATE_SUB(CURDATE(), INTERVAL 8 DAY), DATE_SUB(NOW(), INTERVAL 7 DAY)),
+('jakiya', '79f629f2c0ef00392d5524f322745741:a2957c86bed15009b00e48de29775aeb645ffabe67011692a42aa565d7864ddb0de962da500da311dc7302360058d2c83af5ce052932aeb80785630e578add7f', 'Jakiya', 'Jones', 72000, 34, DATE_SUB(CURDATE(), INTERVAL 8 DAY), NULL),
+('dayton', '79f629f2c0ef00392d5524f322745741:a2957c86bed15009b00e48de29775aeb645ffabe67011692a42aa565d7864ddb0de962da500da311dc7302360058d2c83af5ce052932aeb80785630e578add7f', 'Dayton', 'Rogers', 48000, 24, DATE_SUB(CURDATE(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 2 DAY)),
+('khaliyah', '79f629f2c0ef00392d5524f322745741:a2957c86bed15009b00e48de29775aeb645ffabe67011692a42aa565d7864ddb0de962da500da311dc7302360058d2c83af5ce052932aeb80785630e578add7f', 'Khaliyah', 'Harris', 55000, 27, DATE_SUB(CURDATE(), INTERVAL 3 DAY), NULL),
+('jayvon', '79f629f2c0ef00392d5524f322745741:a2957c86bed15009b00e48de29775aeb645ffabe67011692a42aa565d7864ddb0de962da500da311dc7302360058d2c83af5ce052932aeb80785630e578add7f', 'Jayvon', 'Harris', 83000, 31, CURDATE(), NULL),
+('dakota', '79f629f2c0ef00392d5524f322745741:a2957c86bed15009b00e48de29775aeb645ffabe67011692a42aa565d7864ddb0de962da500da311dc7302360058d2c83af5ce052932aeb80785630e578add7f', 'Dakota', 'Mitchell', 41000, 22, CURDATE(), NOW());
+
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users ORDER BY registerday, username;
+
+-- 1. Registration
+INSERT INTO Users (username, password, firstname, lastname, salary, age, registerday, signintime)
+VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL);
+
+-- 2. Sign-in
+SELECT username, password FROM Users WHERE username = ?;
+UPDATE Users SET signintime = NOW() WHERE username = ?;
+
+-- 3. Search by first and/or last name
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users
+WHERE firstname LIKE '%di%' AND lastname LIKE '%mcguire%' ORDER BY username;
+
+-- 4. Search by userid
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users
+WHERE username = 'dillon';
+
+-- 5. Salary between X and Y
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users
+WHERE salary BETWEEN 50000 AND 80000 ORDER BY salary;
+
+-- 6. Age between X and Y
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users
+WHERE age BETWEEN 20 AND 30 ORDER BY age;
+
+-- 7. Registered after dillon
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users
+WHERE registerday > (SELECT registerday FROM Users WHERE username = 'dillon')
+ORDER BY registerday, username;
+
+-- 8. Never signed in
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users
+WHERE signintime IS NULL ORDER BY username;
+
+-- 9. Registered the same day as dillon
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users
+WHERE registerday = (SELECT registerday FROM Users WHERE username = 'dillon')
+AND username <> 'dillon' ORDER BY username;
+
+-- 10. Registered today
+SELECT username, firstname, lastname, salary, age, registerday, signintime FROM Users
+WHERE registerday = CURDATE() ORDER BY username;
