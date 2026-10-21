@@ -170,3 +170,7 @@ td.empty { padding: 36px 12px; text-align: center; color: var(--muted); }
   .search-form { flex-direction: column; align-items: stretch; }
   .filter { max-width: 150px; }
 }
+
+#result-table tbody tr { cursor: pointer; }
+#result-table tbody tr.picked { background: var(--mint-soft); box-shadow: inset 3px 0 0 var(--mint); }
+.tip { margin: 14px 0 0; color: var(--muted); font-size: .84rem; }
