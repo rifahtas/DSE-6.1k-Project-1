@@ -170,7 +170,7 @@ sql.txt             all SQL statements
 
 ## Collaboration
 
-Most. Afroz is a collaborator on this repository. We share work through GitHub:
+We share work through GitHub:
 
 | Command | What it does |
 |---|---|
@@ -184,4 +184,5 @@ Her changes appear in the commit history.
 
 ## Contributors
 
-- [@rifahtas](https://github.com/rifahtas): project owner
+- [@rifahtas](https://github.com/rifahtas)
+- [@most-afroz](https://github.com/most-afroz)

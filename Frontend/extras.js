@@ -6,8 +6,16 @@
 
     const tip = document.createElement('p');
     tip.className = 'tip';
-    tip.textContent = 'Tip: click a user to put their name in the search box. Press / to filter, Esc to clear.';
+    tip.textContent = 'Tip: click a user to fill the open search (userid, or first and last name). Press / to filter, Esc to clear.';
     results.appendChild(tip);
+
+    // put a value into a search box if that box is on screen
+    function fill(name, value) {
+        const input = searchForm.querySelector('input[name="' + name + '"]');
+        if (!input) return false;
+        input.value = value;
+        return true;
+    }
 
     tbody.addEventListener('click', (e) => {
         const row = e.target.closest('tr');
@@ -17,10 +25,18 @@
         tbody.querySelectorAll('tr.picked').forEach((r) => r.classList.remove('picked'));
         row.classList.add('picked');
 
-        const input = searchForm.querySelector('input[name="username"]');
-        if (input && !searchForm.classList.contains('hidden')) {
-            input.value = nameEl.textContent;
-            input.focus();
+        if (searchForm.classList.contains('hidden')) return;
+
+        // columns: 0 = username, 1 = first name, 2 = last name
+        const username = nameEl.textContent;
+        const firstname = row.cells[1] ? row.cells[1].textContent : '';
+        const lastname = row.cells[2] ? row.cells[2].textContent : '';
+
+        // searches 4, 7, 9 have a Userid box; search 3 has First and Last name boxes
+        const filled = fill('username', username) | fill('first', firstname) | fill('last', lastname);
+        if (filled) {
+            const first = searchForm.querySelector('input');
+            if (first) first.focus();
         }
     });
 
